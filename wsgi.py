@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_restplus import Api, Resource, fields
 
-application = Flask(__name__)
-api = Api(application, version='1.0', title='TodoMVC API',
-    description='A simple TodoMVC API',
+api_v1 = Blueprint('api', __name__, url_prefix='/api/1.0')
+
+api = Api(api_v1, version='1.0', title='Todo API',
+    description='A simple Todo API', doc='/doc/',
 )
 
 ns = api.namespace('todos', description='TODO operations')
@@ -63,8 +64,7 @@ class TodoList(Resource):
 
 
 @ns.route('/<int:id>')
-@ns.response(404, 'Todo not found')
-@ns.param('id', 'The task identifier')
+@ns.response(404, 'Todo not found', params={'id': 'The task identifier'})
 class Todo(Resource):
     '''Show a single todo item and lets you delete them'''
     @ns.doc('get_todo')
@@ -87,4 +87,6 @@ class Todo(Resource):
         return DAO.update(id, api.payload)
 
 if __name__ == "__main__":
+    application = Flask(__name__)
+    application.register_blueprint(api_v1)
     application.run()
