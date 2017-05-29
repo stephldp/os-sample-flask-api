@@ -3,11 +3,11 @@ from flask_restplus import Api, Resource, fields
 
 application = Flask(__name__)
 
-api_v1 = Blueprint('api', __name__, url_prefix='/api/1.0')
+api_v1 = Blueprint('api', __name__, url_prefix='/api')
 application.register_blueprint(api_v1)
 
 api = Api(api_v1, version='1.0', title='Todo API',
-    description='A simple Todo API', doc="/doc/"
+    description='A simple Todo API'
 )
 
 ns = api.namespace('todos', description='TODO operations')
