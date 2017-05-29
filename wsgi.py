@@ -3,10 +3,8 @@ from flask_restplus import Api, Resource, fields
 
 application = Flask(__name__)
 
-api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/1.0')
-
-api = Api(api_v1, version='1.0', title='Todo API',
-    description='A simple Todo API'
+api = Api(application, version='1.0', title='Todo API',
+    description='A simple Todo API', prefix='/api/1.0'
 )
 
 ns = api.namespace('todos', description='TODO operations')
@@ -89,5 +87,4 @@ class Todo(Resource):
         return DAO.update(id, api.payload)
 
 if __name__ == "__main__":
-    application.register_blueprint(api_v1)
     application.run(debug=True)
